@@ -14,7 +14,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 		let pathComponents = (Bundle.main.bundlePath as NSString).pathComponents
 		let mainPath = NSString.path(withComponents: Array(pathComponents[0...(pathComponents.count - 5)]))
-		NSWorkspace.shared.launchApplication(mainPath)
+		let mainURL = URL(fileURLWithPath: mainPath)
+		try! NSWorkspace.shared.launchApplication(at: mainURL, options: [.andHide], configuration: [
+			.appleEvent: NSAppleEventDescriptor(
+				eventClass: UTGetOSTypeFromString("SDSL" as CFString),
+				eventID: UTGetOSTypeFromString("LatL" as CFString),
+				targetDescriptor: nil,
+				returnID: AEReturnID(kAutoGenerateReturnID),
+				transactionID: AETransactionID(kAnyTransactionID)
+			)
+		])
 		NSApp.terminate(nil)
 	}
 }
